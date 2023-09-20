@@ -51,7 +51,7 @@ data:
   KEY2_NAME:VALUE2
 ```
 
-Note: Values in the secrets a re base 64 encoded
+Note: Values in the secrets are base 64 encoded
 
 ```
 # secrets.yaml
@@ -89,4 +89,17 @@ data:
 # custome values.yaml
 ```
 helm install -f ./custom-values.yaml stable/nginx-ingress
+```
+
+
+# S3 Plugin
+```
+helm version
+helm plugin install https://github.com/hypnoglow/helm-s3.git --version 0.14.0
+helm plugin list
+```
+
+```
+helm repo add avaya s3://my-charts/
+helm repo list
 ```

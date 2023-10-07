@@ -1,3 +1,6 @@
+TODO :
+Take the latest build & repeat the steps 
+
 # Original Source :
 https://github.com/Azure-Samples/azure-search-openai-demo
 
@@ -25,6 +28,7 @@ Change to the Tenant where u have signed up for Azure AI & verify if it has chan
 az account list --output table
 # To change ... 
 az account set --subscription $SUBSCRIPTION_ID
+az account set --subscription 83307c02-8dab-47fa-bf09-f49e7989eec1
 # To verify ...
 az account show --output table 
 ```
@@ -71,43 +75,18 @@ azd init -t azure-search-openai-demo
     Learn more about running 3rd party code on our DevHub: https://aka.ms/azd-third-party-code-notice
 
 
-## Cost Reduction
-
-    To reduce costs, you can switch to free SKUs for 
-     - Azure App Service
-     - Azure Cognitive Search
-
-```sh
-        azd env set AZURE_SEARCH_SERVICE_SKU free
-        azd config unset AZURE_SEARCH_SERVICE_SKU
-        azd env get-values
-```
-
-([See possible sku values](https://learn.microsoft.com/azure/templates/microsoft.search/searchservices?pivots=deployment-language-bicep#sku))
-
-     - Form Recognizer 
-        infra/main.parameters.json
-```json
-    "formRecognizerSkuName": {      
-        "value":"free" 
-    },
-```
-
-    by changing the parameters file under the infra folder. 
-    There are some limits to consider; for example, you can have up to 1 free Cognitive Search resource per subscription, and the free Form Recognizer resource only analyzes the first 2 pages of each document. 
-
-    You can also reduce costs associated with the Form Recognizer by reducing the number of documents in the data folder, or by removing the postprovision hook in azure.yaml that runs the prepdocs.py script.
-
-
-
-
 # Enabling Application Insights
 To enable Application Insights and the tracing of each request, along with the logging of errors, set the AZURE_USE_APPLICATION_INSIGHTS variable to true before running azd up
 
-## Install the Fluent UI React package
-Ref :https://www.npmjs.com/package/@fluentui/react
+
 ```sh
+# Install the Fluent UI React package
+# Ref :https://www.npmjs.com/package/@fluentui/react
 npm i @fluentui/react
+
+# Install https://www.npmjs.com/package/@azure/msal-browser 
+cd azure-search-openai-demo/app/frontend
+npm i @azure/msal-browser
 ```
 
 ```sh
@@ -121,7 +100,10 @@ azd env set AZURE_LOCATION "East US"
 azd env get-values   
 ```
 
-Deploy ...
+### Files for upload
+Chang the file in the data folder 
+
+### Deploy ...
 
 ```sh
 azd up
@@ -140,7 +122,7 @@ To clean up all the resources created by this sample:
  ### Troubleshooting
 
 If you need to find the name of your deleted resources, you can get a list of deleted resource names
-
+(Run in pwsh)
  ```sh
  Get-AzResource -ResourceId /subscriptions/83307c02-8dab-47fa-bf09-f49e7989eec1/providers/Microsoft.CognitiveServices/deletedAccounts -ApiVersion 2021-04-30
  ```
@@ -159,3 +141,34 @@ Remove-AzResource -ResourceId /subscriptions/83307c02-8dab-47fa-bf09-f49e7989eec
 Remove-AzResource -ResourceId   /subscriptions/83307c02-8dab-47fa-bf09-f49e7989eec1/providers/Microsoft.CognitiveServices/locations/eastus/resourceGroups/kms/deletedAccounts/classify-text -ApiVersion 2021-04-30 -verbose
 
 ```
+
+<hr>
+<hr>
+
+## Cost Reduction (Does not work)
+
+    To reduce costs, you can switch to free SKUs for 
+     - Azure App Service
+     - Azure Cognitive Search
+
+```sh
+        azd env set AZURE_SEARCH_SERVICE_SKU free
+        azd env set AZURE_SEARCH_SERVICE_SKU ""
+        azd config unset AZURE_SEARCH_SERVICE_SKU
+        azd env get-values
+```
+
+([See possible sku values](https://learn.microsoft.com/azure/templates/microsoft.search/searchservices?pivots=deployment-language-bicep#sku))
+
+     - Form Recognizer 
+        infra/main.parameters.json
+```json
+    "formRecognizerSkuName": {      
+        "value":"free" 
+    },
+```
+
+    by changing the parameters file under the infra folder. 
+    There are some limits to consider; for example, you can have up to 1 free Cognitive Search resource per subscription, and the free Form Recognizer resource only analyzes the first 2 pages of each document. 
+
+    You can also reduce costs associated with the Form Recognizer by reducing the number of documents in the data folder, or by removing the postprovision hook in azure.yaml that runs the prepdocs.py script

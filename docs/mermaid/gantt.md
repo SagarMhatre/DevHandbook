@@ -16,11 +16,11 @@ gantt
         Task : t10, 2023-12-14 00:00, 1d
         Active Task:  active, t11, 2023-12-15 00:00, 2d
         Done Task:  done, t12, 2023-12-16 00:00, 4h 
-        % Can't read text
+        % Can't read text if long
         Critical Task :  crit, t20, 2023-12-14 00:00, 3d
         Critical Active Task:  crit, active, t21, 2023-12-15 00:00, 2d
-        Critical Done Task:  crit, done, t22, 2023-12-16 00:00, 1w
-        % Can't read text
+        Critical Done Task:  crit, done, t22, 2023-12-16 00:00, 3h
+        % Can't read text if long
 
 
 ```

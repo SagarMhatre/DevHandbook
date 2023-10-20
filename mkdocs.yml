@@ -1,4 +1,12 @@
 site_name: DevHandbook
 nav:
   - Home: index.md
+  - Mermaid: mermaid/gantt.md
+  - Container :
+    - Docker : docker
+    - Kubernetes : k8s/ReadMe.md
+    - Helm : k8s/helm/ReadMe.md
   - About: about.md
+plugins:
+    - search
+    - mermaid2

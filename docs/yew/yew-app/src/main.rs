@@ -1,6 +1,8 @@
 use yew::prelude::*;
+use serde::Deserialize;
+use gloo_net::http::Request;
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Deserialize,Clone)]
 struct Video {
     id: usize,
     title: String,
@@ -41,37 +43,30 @@ pub fn videos_table(VideosTableProps { videos }: &VideosTableProps) -> Html {
 
 #[function_component(App)]
 fn app() -> Html {
+    let my_videos = use_state(|| vec![]);
+    {
+        let videos = my_videos.clone();
+        use_effect_with((), move |_| {
+            let videos = videos.clone();
+            wasm_bindgen_futures::spawn_local(async move {
+                //let fetched_videos: Vec<Video> = Request::get("https://yew.rs/tutorial/data.json")
+                let fetched_videos: Vec<Video> = Request::get("/tutorial/data.json")        // To avoid CORS, we use proxy
+                    .send()
+                    .await
+                    .unwrap()
+                    .json()
+                    .await
+                    .unwrap();
+                videos.set(fetched_videos);
+            });
+            || ()
+        });
+    }
+    
 
-    let my_videos = vec![
-    Video {
-        id: 1,
-        title: "Building and breaking things 2 ".to_string(),
-        speaker: "John Doe".to_string(),
-        url: "https://youtu.be/PsaFVLr8t4E".to_string(),
-    },
-    Video {
-        id: 2,
-        title: "The development process 2 ".to_string(),
-        speaker: "Jane Smith".to_string(),
-        url: "https://youtu.be/PsaFVLr8t4E".to_string(),
-    },
-    Video {
-        id: 3,
-        title: "The Web 7.0 2 ".to_string(),
-        speaker: "Matt Miller".to_string(),
-        url: "https://youtu.be/PsaFVLr8t4E".to_string(),
-    },
-    Video {
-        id: 4,
-        title: "Mouseless development 2 ".to_string(),
-        speaker: "Tom Jerry".to_string(),
-        url: "https://youtu.be/PsaFVLr8t4E".to_string(),
-    },
-];
-
-let videos_paragraph = my_videos.iter().map(|video| html! {
-   <p key={video.id}>{format!("{}: {}", video.speaker, video.title)}</p>
-}).collect::<Html>();
+    let videos_paragraph = my_videos.iter().map(|video| html! {
+    <p key={video.id}>{format!("{}: {}", video.speaker, video.title)}</p>
+    }).collect::<Html>();
 
 
 
@@ -91,16 +86,12 @@ let videos_paragraph = my_videos.iter().map(|video| html! {
         </div>
 
        
-        <VideosTable videos ={my_videos} />
+        <VideosTable videos ={(*my_videos).clone()} />
           
 
     </>
     }
 }
-
-/*
-
-*/
 
 fn main() {
     yew::Renderer::<App>::new().render();

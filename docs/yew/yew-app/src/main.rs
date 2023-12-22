@@ -11,6 +11,21 @@ struct Video {
 }
 
 #[derive(Properties, PartialEq)]
+struct VideosDetailsProps {
+    video: Video,
+}
+
+#[function_component(VideoDetails)]
+fn video_details(VideosDetailsProps { video }: &VideosDetailsProps) -> Html {
+    html! {
+        <div>
+            <h3>{ video.title.clone() }</h3>
+            <img src="https://via.placeholder.com/640x360.png?text=Video+Player+Placeholder" alt="video thumbnail" />
+        </div>
+    }
+}
+
+#[derive(Properties, PartialEq)]
 pub struct VideosTableProps {
     videos: Vec<Video>,
 }
@@ -69,6 +84,16 @@ fn app() -> Html {
     }).collect::<Html>();
 
 
+    let selected_video = Video{
+        id: 1,
+        title: "Building and breaking things".to_string(),
+        speaker: "John Doe".to_string(),
+        url: "https://youtu.be/PsaFVLr8t4E".to_string()
+    };
+
+    let details =  html! {
+                <VideoDetails video={selected_video} />
+            };
 
     html! {
         <>
@@ -85,9 +110,11 @@ fn app() -> Html {
          {videos_paragraph}
         </div>
 
+
        
         <VideosTable videos ={(*my_videos).clone()} />
           
+          {details}
 
     </>
     }

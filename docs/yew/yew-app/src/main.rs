@@ -42,7 +42,7 @@ pub fn videos_table(VideosTableProps { videos }: &VideosTableProps) -> Html {
 #[function_component(App)]
 fn app() -> Html {
 
-    let myVideos = vec![
+    let my_videos = vec![
     Video {
         id: 1,
         title: "Building and breaking things 2 ".to_string(),
@@ -69,7 +69,7 @@ fn app() -> Html {
     },
 ];
 
-let videosPara = myVideos.iter().map(|video| html! {
+let videos_paragraph = my_videos.iter().map(|video| html! {
    <p key={video.id}>{format!("{}: {}", video.speaker, video.title)}</p>
 }).collect::<Html>();
 
@@ -87,11 +87,11 @@ let videosPara = myVideos.iter().map(|video| html! {
         </div>
 
         <div>
-         {videosPara}
+         {videos_paragraph}
         </div>
 
        
-        <VideosTable videos ={myVideos} />
+        <VideosTable videos ={my_videos} />
           
 
     </>

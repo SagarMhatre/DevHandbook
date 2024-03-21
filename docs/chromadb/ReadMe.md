@@ -16,3 +16,10 @@ docker run --rm --name chromadb -p 8000:8000 -v /Users/sagarmhatre/Documents/src
 GA Tags : https://github.com/chroma-core/chroma/tags
 Dev releases : https://github.com/chroma-core/chroma/releases
 
+```sh
+
+docker network create --driver bridge alpine-net
+
+docker run --rm --name chromadb -p 8000:8000 --network alpine-net  -v /Users/sagarmhatre/Documents/src/DevHandbook/docs/chromadb/chroma:/chroma/chroma chromadb/chroma:0.4.24
+
+```
